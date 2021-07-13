@@ -30,11 +30,15 @@ def setup_routes(app):
     def books():
         return run_query("SELECT * FROM books50")
 
-    @app.route('/books-sorted-ascending')
+    @app.route('/books-sorted-title-ascending')
+    def books_sorted_ascending():
+        return run_query("SELECT * FROM books50 ORDER BY title")
+
+    @app.route('/books-sorted-price-ascending')
     def books_sorted_ascending():
         return run_query("SELECT * FROM books50 ORDER BY price")
 
-    @app.route('/books-sorted-descending')
+    @app.route('/books-sorted-price-descending')
     def books_sorted_descending():
         return run_query("SELECT * FROM books50 ORDER BY price DESC")
 

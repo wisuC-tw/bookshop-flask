@@ -12,7 +12,7 @@ This is a bookshop app.
 ### Setup
 Create a new virtual environment and activate it
 ```
-$ python3 -m venv venv
+$ python -m venv venv
 $ source venv/bin/activate
 ```
 

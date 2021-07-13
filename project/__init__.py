@@ -30,14 +30,34 @@ def setup_routes(app):
     def books():
         sort_on = request.args.get("sort-on") # id, author, title, image_url, small_image_url, price
         sort_order = request.args.get("sort-order") # ASC, DESC
-
-        app.logger.info(sort_on)
-        app.logger.info(sort_order)
         basic_query = "SELECT id, author, title, image_url, small_image_url, price FROM books50"
         if not sort_on and not sort_order:
             return run_query(f"{basic_query}")
         else:
             return run_query(f"{basic_query} ORDER BY {sort_on} {sort_order or ''}")
+
+    @app.route('/books/search')
+    def books_search():
+        name = request.args.get("name")
+        price = request.args.get("price")
+        language = request.args.get("language")
+        isbn = request.args.get("isbn")
+        
+        basic_query = "SELECT * FROM books50"
+        query_conditions_list = []
+        if name:
+            query_conditions_list.append(f"title LIKE '%{name}%'")
+            query_conditions_list.append(f"author LIKE '%{name}%'")
+        if price:
+            query_conditions_list.append(f"price LIKE '%{price}%'")
+        if language:
+            query_conditions_list.append(f"language_code LIKE '%{language}%'")
+        if isbn:
+            query_conditions_list.append(f"isbn LIKE '%{isbn}%'")
+            query_conditions_list.append(f"isbn LIKE '%{isbn}%'")
+        query_conditions_string = ' OR '.join(query_conditions_list)
+
+        return run_query(f"{basic_query} WHERE {query_conditions_string}")
 
 
 def setup_logging(app):
@@ -54,6 +74,7 @@ def setup_logging(app):
         app.logger.info('%s %s %s %s %s', request.remote_addr, request.method, request.scheme, request.full_path, response.status)
         return response
 
+# todo: fix bug where result of 0 rows gives error
 def run_query(query_string):
         db = get_db()
         rows = db.execute(

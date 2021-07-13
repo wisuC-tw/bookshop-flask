@@ -3,3 +3,7 @@ bookshop-flask-venv/
 project/__pycache__
 
 tests/__pycache__
+
+debug.log
+
+*.db*

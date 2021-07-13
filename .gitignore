@@ -1,5 +1,7 @@
 bookshop-flask-venv/
 
+venv/
+
 project/__pycache__
 
 tests/__pycache__

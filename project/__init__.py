@@ -28,19 +28,16 @@ def setup_routes(app):
 
     @app.route('/books')
     def books():
-        return run_query("SELECT * FROM books50")
+        sort_on = request.args.get("sort-on") # id, author, title, image_url, small_image_url, price
+        sort_order = request.args.get("sort-order") # ASC, DESC
 
-    @app.route('/books-sorted-title-ascending')
-    def books_sorted_title_ascending():
-        return run_query("SELECT * FROM books50 ORDER BY title")
-
-    @app.route('/books-sorted-price-ascending')
-    def books_sorted_price_ascending():
-        return run_query("SELECT * FROM books50 ORDER BY price")
-
-    @app.route('/books-sorted-price-descending')
-    def books_sorted_price_descending():
-        return run_query("SELECT * FROM books50 ORDER BY price DESC")
+        app.logger.info(sort_on)
+        app.logger.info(sort_order)
+        basic_query = "SELECT id, author, title, image_url, small_image_url, price FROM books50"
+        if not sort_on and not sort_order:
+            return run_query(f"{basic_query}")
+        else:
+            return run_query(f"{basic_query} ORDER BY {sort_on} {sort_order or ''}")
 
 
 def setup_logging(app):

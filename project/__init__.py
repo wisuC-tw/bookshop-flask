@@ -38,6 +38,9 @@ def setup_routes(app):
 
     @app.route('/books/search')
     def books_search():
+        if not request.args:
+            return 'No search parameters were provided.'
+
         name = request.args.get("name")
         price = request.args.get("price")
         language = request.args.get("language")
@@ -63,8 +66,6 @@ def setup_routes(app):
     def books_id(book_id):
         return run_query(f"SELECT * FROM books50 WHERE id = {book_id}")
 
-
-
 def setup_logging(app):
     formatter = logging.Formatter(
         "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
@@ -79,12 +80,14 @@ def setup_logging(app):
         app.logger.info('%s %s %s %s %s', request.remote_addr, request.method, request.scheme, request.full_path, response.status)
         return response
 
-# todo: fix bug where result of 0 rows gives error
 def run_query(query_string):
         db = get_db()
         rows = db.execute(
             query_string
         ).fetchall()
+        
+        if not rows:
+            return jsonify([])
 
         column_names = rows[0].keys()
         data = [dict(zip(column_names, row)) for row in rows]

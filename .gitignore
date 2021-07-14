@@ -2,9 +2,7 @@ bookshop-flask-venv/
 
 venv/
 
-project/__pycache__
-
-tests/__pycache__
+*__pycache__*
 
 debug.log
 

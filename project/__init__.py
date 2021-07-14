@@ -7,7 +7,7 @@ from project.db import get_db
 def create_app(config_filename=None):
     app= Flask(__name__)
     
-    app.config['DATABASE_URI']=os.path.join(app.root_path, "booklist.db")
+    app.config['DATABASE_URI']='../bookshop-flask/booklist.db'
 
     setup_routes(app)
     setup_logging(app)
@@ -58,6 +58,11 @@ def setup_routes(app):
         query_conditions_string = ' OR '.join(query_conditions_list)
 
         return run_query(f"{basic_query} WHERE {query_conditions_string}")
+
+    @app.route('/books/<int:book_id>')
+    def books_id(book_id):
+        return run_query(f"SELECT * FROM books50 WHERE id = {book_id}")
+
 
 
 def setup_logging(app):

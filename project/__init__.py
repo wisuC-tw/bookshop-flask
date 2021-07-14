@@ -34,7 +34,7 @@ def setup_routes(app):
         if not sort_on and not sort_order:
             return run_query(f"{basic_query}")
         else:
-            return run_query(f"{basic_query} ORDER BY {sort_on} {sort_order or ''}")
+            return run_query(f"{basic_query} ORDER BY {sort_on or 'id'} {sort_order or ''}")
 
     @app.route('/books/search')
     def books_search():

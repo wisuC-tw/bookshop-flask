@@ -7,8 +7,13 @@ workflows:
   sample:
     jobs:
       - build-and-test
-      - deploy
-          
+      - deploy:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: main
+
 jobs:
   build-and-test:
     docker:
@@ -24,11 +29,6 @@ jobs:
           python -m unittest -v
 
   deploy:
-    requires:
-      - build-and-test
-    filters:
-      branches:
-        only: master
     machine: true
     steps:
     - checkout

@@ -7,6 +7,12 @@ workflows:
   sample:
     jobs:
       - build-and-test
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
 
 jobs:
   build-and-test:
@@ -21,3 +27,11 @@ jobs:
         name: Run tests
         command: |
           python -m unittest -v
+
+  deploy:
+    steps:
+    - checkout
+    - run:
+        name: build docker image
+        command: |
+          sh deployment/build.sh

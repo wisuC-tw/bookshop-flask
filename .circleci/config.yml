@@ -1,0 +1,23 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@1.2
+
+workflows:
+  sample:
+    jobs:
+      - build-and-test
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/python:3.9.6
+    steps:
+    - checkout
+    - python/install-packages:
+        pkg-manager: pip
+        # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory
+    - run:
+        name: Run tests
+        command: |
+          python -m unittest -v

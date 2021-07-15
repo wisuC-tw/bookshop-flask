@@ -29,9 +29,10 @@ jobs:
           python -m unittest -v
 
   deploy:
+    machine: true
     steps:
     - checkout
     - run:
-        name: build docker image
+        name: Build docker image
         command: |
           sh deployment/build.sh

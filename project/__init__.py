@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify, g
 import logging
 from logging.handlers import WatchedFileHandler
-import os 
 from project.db import get_db
 
 def create_app(config_filename=None):
     app= Flask(__name__)
     
     app.config['DATABASE_URI']='../bookshop-flask/booklist.db'
+    app.config['JSON_AS_ASCII'] = False
 
     setup_routes(app)
     setup_logging(app)

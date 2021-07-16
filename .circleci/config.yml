@@ -9,10 +9,10 @@ workflows:
       - build-and-test
       - build-docker-image:
         requires:
-          - build-and-test  
+          - build-and-test
         filters:
-            branches:
-              only: main
+          branches:
+            only: main
       - deploy:
         requires:
           - build-docker-image
@@ -30,7 +30,6 @@ jobs:
         name: Run tests
         command: |
           python -m unittest -v
-
   build-docker-image:
     machine: true
     steps:
@@ -39,7 +38,6 @@ jobs:
       name: Build docker image
       command: |
         sh deployment/build.sh
-    
   deploy:
     machine: true
     steps:

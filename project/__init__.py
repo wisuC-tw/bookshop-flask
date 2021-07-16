@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, g
 import logging
 from logging.handlers import WatchedFileHandler
 from project.db import get_db
+import os
 
 def create_app(config_filename=None):
     app= Flask(__name__)
@@ -25,6 +26,10 @@ def setup_routes(app):
     @app.route('/hello')
     def hello():
         return 'Hello, World'
+
+    @app.route('/environment')
+    def get_environment():
+        return 'This is ' + os.environ["CURRENT_ENV"]
 
     @app.route('/books')
     def books():

@@ -8,13 +8,12 @@ workflows:
     jobs:
       - build-and-test
       - build-docker-image:
-          requires:
-            - build-and-test
           filters:
             branches:
               only: main
       - deploy:
           requires:
+            - build-and-test
             - build-docker-image
 
 jobs:
@@ -41,7 +40,6 @@ jobs:
   deploy:
     machine: true
     steps:
-      - checkout
       - run:
           name: Deploy to uat
           command: |

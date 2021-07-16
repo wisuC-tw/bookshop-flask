@@ -22,41 +22,41 @@ jobs:
     docker:
       - image: cimg/python:3.9.6
     steps:
-    - checkout
-    - python/install-packages:
-        pkg-manager: pip
-        # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory
-    - run:
-        name: Run tests
-        command: |
-          python -m unittest -v
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+          # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory
+      - run:
+          name: Run tests
+          command: |
+            python -m unittest -v
   build-docker-image:
     machine: true
     steps:
-    - checkout
-    - build:
-      name: Build docker image
-      command: |
-        sh deployment/build.sh
+      - checkout
+      - build:
+        name: Build docker image
+        command: |
+          sh deployment/build.sh
   deploy:
     machine: true
     steps:
-    - checkout
-    - run:
-      name: Deploy to uat
-      command: |
-        echo 'export $(cat deployment/uat.env)' >> $BASH_ENV
-        source $BASH_ENV
-        echo "$CURRENT_ENV"
-    - run:
-      name: Deploy to sit
-      command: |
-        echo 'export $(cat deployment/sit.env)' >> $BASH_ENV
-        source $BASH_ENV
-        echo "$CURRENT_ENV"
-    - run:
-      name: Deploy to prod
-      command: |
-        echo 'export $(cat deployment/prod.env)' >> $BASH_ENV
-        source $BASH_ENV
-        echo "$CURRENT_ENV"
+      - checkout
+      - run:
+        name: Deploy to uat
+        command: |
+          echo 'export $(cat deployment/uat.env)' >> $BASH_ENV
+          source $BASH_ENV
+          echo "$CURRENT_ENV"
+      - run:
+        name: Deploy to sit
+        command: |
+          echo 'export $(cat deployment/sit.env)' >> $BASH_ENV
+          source $BASH_ENV
+          echo "$CURRENT_ENV"
+      - run:
+        name: Deploy to prod
+        command: |
+          echo 'export $(cat deployment/prod.env)' >> $BASH_ENV
+          source $BASH_ENV
+          echo "$CURRENT_ENV"

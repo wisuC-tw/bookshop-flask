@@ -32,7 +32,22 @@ jobs:
     machine: true
     steps:
     - checkout
-    - run:
-        name: Build docker image
-        command: |
-          sh deployment/build.sh
+    - build:
+      name: Build docker image
+      command: |
+        sh deployment/build.sh
+    - deploy-uat:
+      name: Deploy to uat
+      command: |
+        export $(cat deployment/uat.env)
+        echo "$CURRENT_ENV"
+    - deploy-sit:
+      name: Deploy to sit
+      command: |
+        export $(cat deployment/sit.env)
+        echo "$CURRENT_ENV"
+    - deploy-prod:
+      name: Deploy to prod
+      command: |
+        export $(cat deployment/prod.env)
+        echo "$CURRENT_ENV"

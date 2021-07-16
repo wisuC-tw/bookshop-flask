@@ -34,7 +34,7 @@ jobs:
     machine: true
     steps:
       - checkout
-      - build:
+      - run:
           name: Build docker image
           command: |
             sh deployment/build.sh

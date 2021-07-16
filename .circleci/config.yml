@@ -4,24 +4,24 @@ orbs:
   python: circleci/python@1.2
 
 workflows:
-  sample:
-    jobs:
-      - build-and-test
-      - build-docker-image:
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only: main
-      - deploy-uat:
-          requires:
-            - build-docker-image
-      - deploy-sit:
-          requires:
-            - build-docker-image
-      - deploy-prod:
-          requires:
-            - build-docker-image
+  jobs:
+    - build-and-test
+    - build-docker-image:
+        filters:
+          branches:
+            only: main
+    - deploy-uat:
+        requires:
+          - build-and-test
+          - build-docker-image
+    - deploy-sit:
+        requires:
+          - build-and-test
+          - build-docker-image
+    - deploy-prod:
+        requires:
+          - build-and-test
+          - build-docker-image
 
 jobs:
   build-and-test:
@@ -47,6 +47,9 @@ jobs:
         sh deployment/build.sh
     
   deploy-uat:
+    machine: true
+    steps:
+    - checkout
     - run:
       name: Deploy to uat
       command: |
@@ -55,6 +58,9 @@ jobs:
         echo "$CURRENT_ENV"
   
   deploy-sit:
+    machine: true
+    steps:
+    - checkout
     - run:
       name: Deploy to sit
       command: |
@@ -63,6 +69,9 @@ jobs:
         echo "$CURRENT_ENV"
   
   deploy-prod:
+    machine: true
+    steps:
+    - checkout
     - run:
       name: Deploy to prod
       command: |

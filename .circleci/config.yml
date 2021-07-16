@@ -7,13 +7,14 @@ workflows:
   jobs:
     - build-and-test
     - build-docker-image:
-      - build-and-test  
+      requires:
+        - build-and-test  
       filters:
           branches:
             only: main
     - deploy:
-        requires:
-          - build-docker-image
+      requires:
+        - build-docker-image
 
 jobs:
   build-and-test:

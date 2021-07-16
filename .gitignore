@@ -5,3 +5,5 @@ venv/
 *__pycache__*
 
 debug.log
+
+bookshop-flask-image.tar

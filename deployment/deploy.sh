@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# echo "Loading an image" # Alternative is to pull from a registry
-# docker load < bookshop-flask-image.tar
+echo "Loading an image" # Alternative is to pull from a registry
+docker load < bookshop-flask-image.tar
 
 # CURRENT_ENV="dev" # From CD tool
 

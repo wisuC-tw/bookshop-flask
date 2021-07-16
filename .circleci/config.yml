@@ -8,14 +8,14 @@ workflows:
     jobs:
       - build-and-test
       - build-docker-image:
-        requires:
-          - build-and-test
-        filters:
-          branches:
-            only: main
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: main
       - deploy:
-        requires:
-          - build-docker-image
+          requires:
+            - build-docker-image
 
 jobs:
   build-and-test:
@@ -35,28 +35,28 @@ jobs:
     steps:
       - checkout
       - build:
-        name: Build docker image
-        command: |
-          sh deployment/build.sh
+          name: Build docker image
+          command: |
+            sh deployment/build.sh
   deploy:
     machine: true
     steps:
       - checkout
       - run:
-        name: Deploy to uat
-        command: |
-          echo 'export $(cat deployment/uat.env)' >> $BASH_ENV
-          source $BASH_ENV
-          echo "$CURRENT_ENV"
+          name: Deploy to uat
+          command: |
+            echo 'export $(cat deployment/uat.env)' >> $BASH_ENV
+            source $BASH_ENV
+            echo "$CURRENT_ENV"
       - run:
-        name: Deploy to sit
-        command: |
-          echo 'export $(cat deployment/sit.env)' >> $BASH_ENV
-          source $BASH_ENV
-          echo "$CURRENT_ENV"
+          name: Deploy to sit
+          command: |
+            echo 'export $(cat deployment/sit.env)' >> $BASH_ENV
+            source $BASH_ENV
+            echo "$CURRENT_ENV"
       - run:
-        name: Deploy to prod
-        command: |
-          echo 'export $(cat deployment/prod.env)' >> $BASH_ENV
-          source $BASH_ENV
-          echo "$CURRENT_ENV"
+          name: Deploy to prod
+          command: |
+            echo 'export $(cat deployment/prod.env)' >> $BASH_ENV
+            source $BASH_ENV
+            echo "$CURRENT_ENV"

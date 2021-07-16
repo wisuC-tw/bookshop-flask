@@ -7,20 +7,12 @@ workflows:
   jobs:
     - build-and-test
     - build-docker-image:
-        filters:
+      - build-and-test  
+      filters:
           branches:
             only: main
-    - deploy-uat:
+    - deploy:
         requires:
-          - build-and-test
-          - build-docker-image
-    - deploy-sit:
-        requires:
-          - build-and-test
-          - build-docker-image
-    - deploy-prod:
-        requires:
-          - build-and-test
           - build-docker-image
 
 jobs:
@@ -46,7 +38,7 @@ jobs:
       command: |
         sh deployment/build.sh
     
-  deploy-uat:
+  deploy:
     machine: true
     steps:
     - checkout
@@ -56,22 +48,12 @@ jobs:
         echo 'export $(cat deployment/uat.env)' >> $BASH_ENV
         source $BASH_ENV
         echo "$CURRENT_ENV"
-  
-  deploy-sit:
-    machine: true
-    steps:
-    - checkout
     - run:
       name: Deploy to sit
       command: |
         echo 'export $(cat deployment/sit.env)' >> $BASH_ENV
         source $BASH_ENV
         echo "$CURRENT_ENV"
-  
-  deploy-prod:
-    machine: true
-    steps:
-    - checkout
     - run:
       name: Deploy to prod
       command: |

@@ -4,17 +4,18 @@ orbs:
   python: circleci/python@1.2
 
 workflows:
-  jobs:
-    - build-and-test
-    - build-docker-image:
-      requires:
-        - build-and-test  
-      filters:
-          branches:
-            only: main
-    - deploy:
-      requires:
-        - build-docker-image
+  sample:
+    jobs:
+      - build-and-test
+      - build-docker-image:
+        requires:
+          - build-and-test  
+        filters:
+            branches:
+              only: main
+      - deploy:
+        requires:
+          - build-docker-image
 
 jobs:
   build-and-test:

@@ -7,12 +7,21 @@ workflows:
   sample:
     jobs:
       - build-and-test
-      - deploy:
+      - build-docker-image:
           requires:
             - build-and-test
           filters:
             branches:
               only: main
+      - deploy-uat:
+          requires:
+            - build-docker-image
+      - deploy-sit:
+          requires:
+            - build-docker-image
+      - deploy-prod:
+          requires:
+            - build-docker-image
 
 jobs:
   build-and-test:
@@ -28,7 +37,7 @@ jobs:
         command: |
           python -m unittest -v
 
-  deploy:
+  build-docker-image:
     machine: true
     steps:
     - checkout
@@ -36,18 +45,27 @@ jobs:
       name: Build docker image
       command: |
         sh deployment/build.sh
-    - deploy-uat:
+    
+  deploy-uat:
+    - run:
       name: Deploy to uat
       command: |
-        export $(cat deployment/uat.env)
+        echo 'export $(cat deployment/uat.env)' >> $BASH_ENV
+        source $BASH_ENV
         echo "$CURRENT_ENV"
-    - deploy-sit:
+  
+  deploy-sit:
+    - run:
       name: Deploy to sit
       command: |
-        export $(cat deployment/sit.env)
+        echo 'export $(cat deployment/sit.env)' >> $BASH_ENV
+        source $BASH_ENV
         echo "$CURRENT_ENV"
-    - deploy-prod:
+  
+  deploy-prod:
+    - run:
       name: Deploy to prod
       command: |
-        export $(cat deployment/prod.env)
+        echo 'export $(cat deployment/prod.env)' >> $BASH_ENV
+        source $BASH_ENV
         echo "$CURRENT_ENV"

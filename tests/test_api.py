@@ -11,6 +11,7 @@ class ApiTest(unittest.TestCase):
     API_URL = BASE_URL + "/books"
 
     def setUp(self):
+        app.config.from_object('config.TestConfig')
         self.c = app.test_client()
         self.c.testing = True
 

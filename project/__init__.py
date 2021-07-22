@@ -29,7 +29,9 @@ def setup_routes(app):
 
     @app.route('/environment')
     def get_environment():
-        return 'This is ' + os.environ["CURRENT_ENV"]
+        if os.getenv("CURRENT_ENV"):
+            return 'This is ' + os.environ["CURRENT_ENV"]
+        return 'No environment variable for "CURRENT_ENV" was defined'
 
     @app.route('/books')
     def books():

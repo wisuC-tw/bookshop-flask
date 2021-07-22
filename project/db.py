@@ -8,9 +8,11 @@ def get_db():
     is unique for each request and will be reused if this is called
     again.
     """
+    if "db_engine" not in g:
+        g.db_engine = create_engine(current_app.config["DATABASE_URI"], echo = True)
+
     if "db" not in g:
-        engine = create_engine(current_app.config["DATABASE_URI"], echo = True)
-        g.db = engine.connect()
+        g.db = g.db_engine.connect()
 
     return g.db
 
@@ -22,6 +24,12 @@ def close_db(e=None):
 
     if db is not None:
         db.close()
+
+    # db_engine = g.pop("db_engine", None)
+
+    # if db_engine is not None:
+    #     db_engine.dispose()
+        
 
 def init_db():
     db = get_db()

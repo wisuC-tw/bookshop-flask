@@ -1,0 +1,1 @@
+COPY books50 FROM '/data/books50.csv' DELIMITER ',' CSV HEADER;

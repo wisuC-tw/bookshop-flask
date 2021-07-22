@@ -1,7 +1,7 @@
-import sqlite3
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
+from sqlalchemy import create_engine, engine
 
 def get_db():
     """Connect to the application's configured database. The connection
@@ -9,10 +9,8 @@ def get_db():
     again.
     """
     if "db" not in g:
-        g.db = sqlite3.connect(
-            current_app.config["DATABASE_URI"], detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
+        engine = create_engine(current_app.config["DATABASE_URI"], echo = True)
+        g.db = engine.connect()
 
     return g.db
 

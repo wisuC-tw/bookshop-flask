@@ -7,7 +7,7 @@ import os
 def create_app(config_filename=None):
     app= Flask(__name__)
     
-    app.config['DATABASE_URI']='booklist.db'
+    app.config['DATABASE_URI']='sqlite:///booklist.db'
     app.config['JSON_AS_ASCII'] = False
 
     setup_routes(app)
@@ -35,7 +35,7 @@ def setup_routes(app):
     def books():
         sort_on = request.args.get("sort-on") # id, author, title, image_url, small_image_url, price
         sort_order = request.args.get("sort-order") # ASC, DESC
-        basic_query = "SELECT id, author, title, image_url, small_image_url, price FROM books50"
+        basic_query = "SELECT * FROM books50"
         if not sort_on and not sort_order:
             return run_query(f"{basic_query}")
         else:

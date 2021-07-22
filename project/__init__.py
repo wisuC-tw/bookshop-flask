@@ -7,8 +7,7 @@ import os
 def create_app(config_filename=None):
     app= Flask(__name__)
     
-    app.config['DATABASE_URI']='sqlite:///booklist.db'
-    app.config['JSON_AS_ASCII'] = False
+    app.config.from_object('config.DevelopmentConfig')
 
     setup_routes(app)
     setup_logging(app)
@@ -30,14 +29,14 @@ def setup_routes(app):
     @app.route('/environment')
     def get_environment():
         if os.getenv("CURRENT_ENV"):
-            return 'This is ' + os.environ["CURRENT_ENV"]
+            return 'This is ' + os.getenv("CURRENT_ENV")
         return 'No environment variable for "CURRENT_ENV" was defined'
 
     @app.route('/books')
     def books():
         sort_on = request.args.get("sort-on") # id, author, title, image_url, small_image_url, price
         sort_order = request.args.get("sort-order") # ASC, DESC
-        basic_query = "SELECT * FROM books50"
+        basic_query = "SELECT id, author, title, image_url, small_image_url, price FROM books50"
         if not sort_on and not sort_order:
             return run_query(f"{basic_query}")
         else:

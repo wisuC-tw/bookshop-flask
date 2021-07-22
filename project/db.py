@@ -2,6 +2,7 @@ import click
 from flask import current_app, g
 from flask.cli import with_appcontext
 from sqlalchemy import create_engine, engine
+import psycopg2
 
 def get_db():
     """Connect to the application's configured database. The connection

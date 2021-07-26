@@ -1,13 +1,6 @@
 from flask import request, jsonify, g
 from app import app
 from project.db import get_db 
-import os
-
-@app.route('/environment')
-def get_environment():
-    if os.getenv("CURRENT_ENV"):
-        return 'This is ' + os.getenv("CURRENT_ENV")
-    return 'No environment variable for "CURRENT_ENV" was defined'
 
 @app.route('/books')
 def books():

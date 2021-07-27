@@ -5,7 +5,7 @@ This is a bookshop app.
 ## Stack
 1. Python
 2. Flask
-3. SQLite
+3. MongoDB
 
 # Getting Started
 
@@ -32,4 +32,16 @@ view the website at http://localhost:5000
 In the tests folder, run
 ```
 python -m unittest -v
+```
+
+### Running Docker
+In the tests folder, run
+```
+docker-compose up --build
+```
+
+### Running static code analysis
+In the tests folder, run
+```
+sh scripts/run-bandit-check.sh
 ```

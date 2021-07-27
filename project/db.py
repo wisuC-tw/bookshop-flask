@@ -3,6 +3,7 @@ from flask import current_app, g
 from flask.cli import with_appcontext
 from sqlalchemy import create_engine, engine
 import psycopg2
+from pymongo import MongoClient
 
 def get_db():
     """Connect to the application's configured database. The connection
@@ -10,10 +11,10 @@ def get_db():
     again.
     """
     if "db_engine" not in g:
-        g.db_engine = create_engine(current_app.config["DATABASE_URI"], echo = True)
-
+        g.db_engine = MongoClient('mongodb://localhost:27017/')
+    
     if "db" not in g:
-        g.db = g.db_engine.connect()
+        g.db = g.db_engine['testingdb']
 
     return g.db
 
@@ -22,9 +23,9 @@ def close_db(e=None):
     connection.
     """
     db = g.pop("db", None)
-
-    if db is not None:
-        db.close()
+    db_engine = g.pop("db_engine", None)
+    if db_engine is not None:
+        db_engine.close()
 
     # db_engine = g.pop("db_engine", None)
 

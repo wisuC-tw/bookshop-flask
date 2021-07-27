@@ -13,5 +13,5 @@ db.init_app(app)
 from project import views
 _ = views
 
-from project import views_sql
-_ = views_sql
+from project import views_mongo
+_ = views_mongo

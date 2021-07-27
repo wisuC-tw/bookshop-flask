@@ -11,7 +11,7 @@ def get_db():
     again.
     """
     if "db_engine" not in g:
-        g.db_engine = MongoClient('mongodb://localhost:27017/')
+        g.db_engine = MongoClient('mongodb://mongodb:27017/')
     
     if "db" not in g:
         g.db = g.db_engine['testingdb']

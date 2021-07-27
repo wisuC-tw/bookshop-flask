@@ -11,7 +11,7 @@ class DevelopmentConfig(Config):
     port = 5432
 
     FLASK_ENV = "dev"
-    DATABASE_URI = f'postgresql+psycopg2://{username}:{password}@postgres:{port}/{database_name}'
+    # DATABASE_URI = f'postgresql+psycopg2://{username}:{password}@postgres:{port}/{database_name}'
 
 class ProductionConfig(Config):
     pass

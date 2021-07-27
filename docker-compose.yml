@@ -1,17 +1,21 @@
 version: '3.8'
 
 services:
-  db:
-    build: ./db
-    container_name: postgres
+  mongodb:
+    image: mongo
     ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: "${DB_USERNAME}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
-      POSTGRES_DB: "${DB_NAME}"
+      - "27017:27017"
+    networks:
+      - backend
+
+  mongo_seed:
+    image: mongo
+    links:
+      - mongodb
     volumes:
-      - ./data:/data
+      - ./mongo-seed:/mongo-seed
+    command:
+      sh /mongo-seed/import.sh
     networks:
       - backend
 
@@ -20,14 +24,9 @@ services:
     container_name: bookshop-flask
     ports: 
       - "5000:5000"
-    environment:
-      DB_USERNAME: "${DB_USERNAME}"
-      DB_PASSWORD : "${DB_PASSWORD}"
-      DB_NAME: "${DB_NAME}"
     networks:
       - backend
 
 networks:
   backend:
-    # Use a custom driver which takes special options
     name: app-network

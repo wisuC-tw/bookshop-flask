@@ -29,7 +29,6 @@ python app.py
 view the website at http://localhost:5000
 
 ### Running All Tests
-In the tests folder, run
 ```
 python -m unittest -v
 ```

@@ -60,4 +60,4 @@ spark-submit \
     --py-files dist/SomePackage-*.whl \
     jobs/spark_main.py
 ```
-the package will be in the dist/ folder
+results in .json format will be written into `spark-outputs` folder

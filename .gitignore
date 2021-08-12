@@ -11,3 +11,5 @@ bookshop-flask-image.tar
 dist/
 
 *.egg-info/
+
+spark-outputs/

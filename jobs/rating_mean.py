@@ -20,6 +20,6 @@ def run(books3000: DataFrame):
     highly_rated = find_highly_rated(books3000, mean_value)
     less_rated = find_less_rated(books3000, mean_value)
 
-    print(utils.json_from_value("mean", mean_value))
-    print(utils.json_from_df("highly_rated", highly_rated))
-    print(utils.json_from_df("less_rated", less_rated))
+    utils.write_to_file(utils.json_from_value("mean", mean_value), 'spark-outputs/mean.json')
+    utils.write_to_file(utils.json_from_df("highly_rated", highly_rated), 'spark-outputs/highly_rated.json')
+    utils.write_to_file(utils.json_from_df("less_rated", less_rated), 'spark-outputs/less_rated.json')

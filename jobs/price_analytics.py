@@ -18,5 +18,5 @@ def run(books3000: DataFrame):
     sum = find_total_cost_all_books(books3000)
     books_in_price_range = find_books_in_price_range(books3000, min=1000, max=2000)
 
-    print(utils.json_from_value("sum", round(sum, 2)))
-    print(utils.json_from_df("books", books_in_price_range))
+    utils.write_to_file(utils.json_from_value("sum", round(sum, 2)), 'spark-outputs/sum.json')
+    utils.write_to_file(utils.json_from_df("books", books_in_price_range), 'spark-outputs/books_in_price_range.json')

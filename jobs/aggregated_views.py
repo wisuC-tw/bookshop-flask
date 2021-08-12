@@ -31,7 +31,7 @@ def run(books3000: DataFrame):
     author_to_books_dict = aggregate_by_author(books3000)
     books_by_one_author = aggregate_by_one_author(books3000, author="Stephenie Meyer")
 
-    print(utils.json_from_dict(year_to_books_dict))
-    print(utils.json_from_df("2015", books_by_one_year))
-    print(utils.json_from_dict(author_to_books_dict))
-    print(utils.json_from_df("Stephenie Meyer", books_by_one_author))
+    utils.write_to_file(utils.json_from_dict(year_to_books_dict), 'spark-outputs/year.json')
+    utils.write_to_file(utils.json_from_df("2015", books_by_one_year), 'spark-outputs/year_single.json')
+    utils.write_to_file(utils.json_from_dict(author_to_books_dict), 'spark-outputs/author.json')
+    utils.write_to_file(utils.json_from_df("Stephenie Meyer", books_by_one_author), 'spark-outputs/author_single.json')

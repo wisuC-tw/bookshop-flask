@@ -139,7 +139,7 @@ class SparkIntgrationTest(unittest.TestCase):
             [ROW_1, ROW_2],
             BASE_COLUMNS
         )
-        actual_df = rating_mean.highly_rated(self.sample_dataframe, 3.21)
+        actual_df = rating_mean.find_highly_rated(self.sample_dataframe, 3.21)
         self.assertEqual(expected_df.schema, actual_df.schema)
         self.assertEqual(expected_df.collect(), actual_df.collect())
 
@@ -149,12 +149,12 @@ class SparkIntgrationTest(unittest.TestCase):
             [ROW_3],
             BASE_COLUMNS
         )
-        actual_df = rating_mean.less_rated(self.sample_dataframe, 3.21)
+        actual_df = rating_mean.find_less_rated(self.sample_dataframe, 3.21)
         self.assertEqual(expected_df.schema, actual_df.schema)
         self.assertEqual(expected_df.collect(), actual_df.collect())
 
     def test_should_return_sum_price_of_all_books(self):
-        actual_value = price_analytics.total_cost_all_books(self.sample_dataframe)
+        actual_value = price_analytics.find_total_cost_all_books(self.sample_dataframe)
         self.assertEqual(73500, actual_value)
 
     def test_should_return_books_in_given_price_range(self):
@@ -162,7 +162,7 @@ class SparkIntgrationTest(unittest.TestCase):
             [ROW_2, ROW_3],
             BASE_COLUMNS
         )
-        actual_df = price_analytics.books_in_price_range(self.sample_dataframe, 100, 1000)
+        actual_df = price_analytics.find_books_in_price_range(self.sample_dataframe, 100, 1000)
         self.assertEqual(expected_df.schema, actual_df.schema)
         self.assertEqual(expected_df.collect(), actual_df.collect())
 

@@ -44,3 +44,20 @@ In the tests folder, run
 ```
 sh scripts/run-bandit-check.sh
 ```
+
+### Building wheel package
+In the root directory, run
+```
+python setup.py bdist_wheel
+```
+the package will be in the dist/ folder
+
+### Running spark jobs
+In the root directory, run
+```
+spark-submit \
+    --master local \
+    --py-files dist/SomePackage-*.whl \
+    jobs/spark_main.py
+```
+the package will be in the dist/ folder

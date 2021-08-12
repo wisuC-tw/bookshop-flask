@@ -7,3 +7,7 @@ venv/
 debug.log
 
 bookshop-flask-image.tar
+
+dist/
+
+*.egg-info/

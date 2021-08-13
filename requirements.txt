@@ -3,6 +3,7 @@ bandit==1.7.0
 certifi==2021.5.30
 chardet==4.0.0
 click==8.0.1
+findspark==1.4.2
 Flask==2.0.1
 gitdb==4.0.7
 GitPython==3.1.18
@@ -11,6 +12,7 @@ idna==2.10
 iniconfig==1.1.1
 itsdangerous==2.0.1
 Jinja2==3.0.1
+linecache2==1.0.0
 MarkupSafe==2.0.1
 packaging==21.0
 pbr==5.6.0
@@ -21,12 +23,16 @@ py4j==0.10.9
 pymongo==3.12.0
 pyparsing==2.4.7
 pyspark==3.1.2
+pytest==6.2.4
 PyYAML==5.4.1
 requests==2.25.1
 six==1.16.0
 smmap==4.0.0
+spark-testing-base==0.10.0
 SQLAlchemy==1.4.22
 stevedore==3.3.0
 toml==0.10.2
+traceback2==1.4.0
+unittest2==1.1.0
 urllib3==1.26.6
 Werkzeug==2.0.1

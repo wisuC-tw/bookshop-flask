@@ -1,9 +1,7 @@
-import unittest
+from sparktestingbase.sqltestcase import SQLTestCase
 from unittest.mock import patch
 from jobs import aggregated_views, price_analytics, rating_mean, utils
 import json
-import logging
-from tests import SPARK
 
 BASE_COLUMNS = [
     "id",
@@ -122,56 +120,56 @@ SAMPLE_JSON = [
     }
 ]
 
-class SparkIntgrationTest(unittest.TestCase):
-
-    def setUp(self):
-        self.sample_dataframe = SPARK.createDataFrame(
-            SAMPLE_DATA,
-            BASE_COLUMNS
-        )
+class SparkIntgrationTest(SQLTestCase):
 
     def test_should_return_mean_rating_value(self):
-        actual_value = rating_mean.find_mean(self.sample_dataframe)
+        input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
+        actual_value = rating_mean.find_mean(input_dataframe)
         self.assertAlmostEqual(3.21, actual_value)
 
     def test_should_return_list_of_books_above_mean_rating(self):
-        expected_df = SPARK.createDataFrame(
+        input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
+        expected_df = self.sqlCtx.createDataFrame(
             [ROW_1, ROW_2],
             BASE_COLUMNS
         )
-        actual_df = rating_mean.find_highly_rated(self.sample_dataframe, 3.21)
+        actual_df = rating_mean.find_highly_rated(input_dataframe, 3.21)
         self.assertEqual(expected_df.schema, actual_df.schema)
         self.assertEqual(expected_df.collect(), actual_df.collect())
-
+        self.assertDataFrameEqual(expected_df, actual_df)
 
     def test_should_return_list_of_books_below_mean_rating(self):
-        expected_df = SPARK.createDataFrame(
+        input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
+        expected_df = self.sqlCtx.createDataFrame(
             [ROW_3],
             BASE_COLUMNS
         )
-        actual_df = rating_mean.find_less_rated(self.sample_dataframe, 3.21)
+        actual_df = rating_mean.find_less_rated(input_dataframe, 3.21)
         self.assertEqual(expected_df.schema, actual_df.schema)
         self.assertEqual(expected_df.collect(), actual_df.collect())
 
     def test_should_return_sum_price_of_all_books(self):
-        actual_value = price_analytics.find_total_cost_all_books(self.sample_dataframe)
+        input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
+        actual_value = price_analytics.find_total_cost_all_books(input_dataframe)
         self.assertEqual(73500, actual_value)
 
     def test_should_return_books_in_given_price_range(self):
-        expected_df = SPARK.createDataFrame(
+        input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
+        expected_df = self.sqlCtx.createDataFrame(
             [ROW_2, ROW_3],
             BASE_COLUMNS
         )
-        actual_df = price_analytics.find_books_in_price_range(self.sample_dataframe, 100, 1000)
+        actual_df = price_analytics.find_books_in_price_range(input_dataframe, 100, 1000)
         self.assertEqual(expected_df.schema, actual_df.schema)
         self.assertEqual(expected_df.collect(), actual_df.collect())
 
     def test_should_return_all_books_grouped_by_year_in_ascending_order(self):
-        expected_df_1 = SPARK.createDataFrame(
+        input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
+        expected_df_1 = self.sqlCtx.createDataFrame(
             [ROW_1, ROW_4],
             BASE_COLUMNS
         )
-        expected_df_2 = SPARK.createDataFrame(
+        expected_df_2 = self.sqlCtx.createDataFrame(
             [ROW_2, ROW_3],
             BASE_COLUMNS
         )
@@ -179,31 +177,33 @@ class SparkIntgrationTest(unittest.TestCase):
             '2007': expected_df_1,
             '2017': expected_df_2
         }
-        actual_dict = aggregated_views.aggregate_by_year(self.sample_dataframe)
+        actual_dict = aggregated_views.aggregate_by_year(input_dataframe)
         self.assertEqual(expected_dict['2007'].schema, actual_dict['2007'].schema)
         self.assertEqual(expected_dict['2007'].collect(), actual_dict['2007'].collect())
         self.assertEqual(expected_dict['2017'].schema, actual_dict['2017'].schema)
         self.assertEqual(expected_dict['2017'].collect(), actual_dict['2017'].collect())
 
     def test_should_return_books_from_one_year_grouped_by_year_in_ascending_order(self):
-        expected_df = SPARK.createDataFrame(
+        input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
+        expected_df = self.sqlCtx.createDataFrame(
             [ROW_1, ROW_4],
             BASE_COLUMNS
         )
-        actual_df = aggregated_views.aggregate_by_one_year(self.sample_dataframe, 2007)
+        actual_df = aggregated_views.aggregate_by_one_year(input_dataframe, 2007)
         self.assertEqual(expected_df.schema, actual_df.schema)
         self.assertEqual(expected_df.collect(), actual_df.collect())
 
     def test_should_return_all_books_grouped_by_author_in_ascending_order(self):
-        expected_df_1 = SPARK.createDataFrame(
+        input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
+        expected_df_1 = self.sqlCtx.createDataFrame(
             [ROW_2],
             BASE_COLUMNS
         )
-        expected_df_2 = SPARK.createDataFrame(
+        expected_df_2 = self.sqlCtx.createDataFrame(
             [ROW_1, ROW_3],
             BASE_COLUMNS
         )
-        expected_df_3 = SPARK.createDataFrame(
+        expected_df_3 = self.sqlCtx.createDataFrame(
             [ROW_4],
             BASE_COLUMNS
         )
@@ -212,7 +212,7 @@ class SparkIntgrationTest(unittest.TestCase):
             "Johnny Johnson": expected_df_2,
             "Quack Quack": expected_df_3
         }
-        actual_dict = aggregated_views.aggregate_by_author(self.sample_dataframe)
+        actual_dict = aggregated_views.aggregate_by_author(input_dataframe)
         self.assertEqual(expected_dict['Al Rae'].schema, actual_dict['Al Rae'].schema)
         self.assertEqual(expected_dict['Al Rae'].collect(), actual_dict['Al Rae'].collect())
         self.assertEqual(expected_dict['Johnny Johnson'].schema, actual_dict['Johnny Johnson'].schema)
@@ -221,16 +221,17 @@ class SparkIntgrationTest(unittest.TestCase):
         self.assertEqual(expected_dict['Quack Quack'].collect(), actual_dict['Quack Quack'].collect())
 
     def test_should_return_books_from_one_author_grouped_by_authour_in_ascending_order(self):
-        expected_df = SPARK.createDataFrame(
+        input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
+        expected_df = self.sqlCtx.createDataFrame(
             [ROW_1, ROW_3],
             BASE_COLUMNS
         )
-        actual_df = aggregated_views.aggregate_by_one_author(self.sample_dataframe, "Johnny Johnson")
+        actual_df = aggregated_views.aggregate_by_one_author(input_dataframe, "Johnny Johnson")
         self.assertEqual(expected_df.schema, actual_df.schema)
         self.assertEqual(expected_df.collect(), actual_df.collect())
 
     def test_should_serialize_json_given_dataframe(self):
-        example_df = SPARK.createDataFrame(
+        example_df = self.sqlCtx.createDataFrame(
             [ROW_1, ROW_2],
             BASE_COLUMNS
         )
@@ -239,7 +240,7 @@ class SparkIntgrationTest(unittest.TestCase):
         self.assertEqual(expected_json, actual_json)
 
     def test_should_serialize_json_given_dictionary_of_dataframes(self):
-        example_df = SPARK.createDataFrame(
+        example_df = self.sqlCtx.createDataFrame(
             [ROW_1, ROW_2],
             BASE_COLUMNS
         )

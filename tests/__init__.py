@@ -1,3 +1,3 @@
-from pyspark.sql import SparkSession
+# from pyspark.sql import SparkSession
 
-SPARK = SparkSession.builder.appName("IntegrationTests").getOrCreate()
+# SPARK = SparkSession.builder.appName("IntegrationTests").getOrCreate()

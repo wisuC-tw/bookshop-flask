@@ -2,9 +2,7 @@ from pyspark.sql import DataFrame
 import jobs.utils as utils
 
 def find_mean(books3000: DataFrame) -> int:
-    mean = books3000
-    mean = mean.agg({'average_rating': 'mean'})
-    mean_value = mean.collect()[0][0]
+    mean_value = books3000.agg({'average_rating': 'mean'}).first()['avg(average_rating)']
     return mean_value    
 
 def find_highly_rated(books3000: DataFrame, mean_value: int) -> DataFrame:

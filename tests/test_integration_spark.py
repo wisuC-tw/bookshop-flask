@@ -189,9 +189,12 @@ class SparkIntgrationTest(SQLTestCase):
             [ROW_1, ROW_4],
             BASE_COLUMNS
         )
-        actual_df = aggregated_views.aggregate_by_one_year(input_dataframe, 2007)
-        self.assertEqual(expected_df.schema, actual_df.schema)
-        self.assertEqual(expected_df.collect(), actual_df.collect())
+        expected_dict = {
+            '2007': expected_df
+        }
+        actual_dict = aggregated_views.aggregate_by_year(input_dataframe, 2007)
+        self.assertEqual(expected_dict['2007'].schema, actual_dict['2007'].schema)
+        self.assertEqual(expected_dict['2007'].collect(), actual_dict['2007'].collect())
 
     def test_should_return_all_books_grouped_by_author_in_ascending_order(self):
         input_dataframe = self.sqlCtx.createDataFrame(SAMPLE_DATA, BASE_COLUMNS)
@@ -226,9 +229,12 @@ class SparkIntgrationTest(SQLTestCase):
             [ROW_1, ROW_3],
             BASE_COLUMNS
         )
-        actual_df = aggregated_views.aggregate_by_one_author(input_dataframe, "Johnny Johnson")
-        self.assertEqual(expected_df.schema, actual_df.schema)
-        self.assertEqual(expected_df.collect(), actual_df.collect())
+        expected_dict = {
+            "Johnny Johnson": expected_df
+        }
+        actual_dict = aggregated_views.aggregate_by_author(input_dataframe, "Johnny Johnson")
+        self.assertEqual(expected_dict['Johnny Johnson'].schema, actual_dict['Johnny Johnson'].schema)
+        self.assertEqual(expected_dict['Johnny Johnson'].collect(), actual_dict['Johnny Johnson'].collect())
 
     def test_should_serialize_json_given_dataframe(self):
         example_df = self.sqlCtx.createDataFrame(

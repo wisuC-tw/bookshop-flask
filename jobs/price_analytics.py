@@ -2,11 +2,9 @@ from pyspark.sql import DataFrame
 import jobs.utils as utils
 
 def find_total_cost_all_books(books3000: DataFrame) -> int:
-    df1 = books3000.select(
-        (books3000['price'] * books3000['books_count']).alias("total")
-    )
-    df2 = df1.agg({'total': 'sum'})
-    sum = df2.collect()[0][0]
+    sum = books3000 \
+        .select((books3000['price'] * books3000['books_count']).alias("total")) \
+        .agg({'total': 'sum'}).first()['sum(total)']
     return sum
 
 def find_books_in_price_range(books3000: DataFrame, min: int, max: int) -> DataFrame:
